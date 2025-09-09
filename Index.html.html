@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MODELOOM Order Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff8f0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: orange;
+      padding: 15px 0;
+      font-size: 28px;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+    header img {
+      width: 50px;
+      height: auto;
+    }
+    form {
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      max-width: 420px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    input, select, button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+    button {
+      background: orange;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .platforms {
+      display: flex;
+      justify-content: space-around;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+    .platforms label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 14px;
+      margin: 5px;
+    }
+    .platforms img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 5px;
+    }
+    #confirmation {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+      display: none;
+    }
+    #processing {
+      margin-top: 10px;
+      font-size: 16px;
+      color: blue;
+      display: none;
+    }
+    .return-policy {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+      background: #fff3e6;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://cdn.worldvectorlogo.com/logos/shopify.svg" alt="Shopify">
+    MODELOOM
+  </header>
+  
+  <form id="orderForm" method="POST">
+    <h3>Which platform would you like to order from?</h3>
+    <div class="platforms">
+      <label><input type="radio" name="platform" value="Amazon" required><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">Amazon</label>
+      <label><input type="radio" name="platform" value="Flipkart"><img src="https://www.freepnglogos.com/uploads/flipkart-logo-png/flipkart-inventory-management-system-zap-inventory-1.png" alt="Flipkart">Flipkart</label>
+      <label><input type="radio" name="platform" value="Meesho"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Meesho_logo.png" alt="Meesho">Meesho</label>
+      <label><input type="radio" name="platform" value="Myntra"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Myntra_Logo.png" alt="Myntra">Myntra</label>
+    </div>
+
+    <input type="text" name="name" placeholder="Full Name" required>
+    <input type="text" name="address" placeholder="Full Address" required>
+    <input type="text" name="pincode" placeholder="Pincode" required>
+    <input type="text" name="number" placeholder="Phone Number" required>
+    
+    <select name="tshirt_size" required>
+      <option value="">Select T-shirt Size</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+    </select>
+    
+    <select name="pant_size" required>
+      <option value="">Select Pant Size</option>
+      <option value="26">26</option>
+      <option value="28">28</option>
+      <option value="30">30</option>
+      <option value="32">32</option>
+      <option value="34">34</option>
+      <option value="36">36</option>
+      <option value="38">38</option>
+    </select>
+    
+    <select name="combo" required>
+      <option value="">Select Combo</option>
+      <option value="Cream Combo">Cream Combo</option>
+      <option value="Green Combo">Green Combo</option>
+      <option value="Black Combo">Black Combo</option>
+    </select>
+    
+    <button type="submit" id="submitBtn">Place Order</button>
+    
+    <div id="processing">Please wait, your order is being processed...</div>
+    <div id="confirmation">Your Order is Confirmed!<br>Please collect your manifest from the platform you ordered from. This is a Trustworthy Website.</div>
+
+    <div class="return-policy">
+      <strong>Return Policy:</strong> You can return the product within 7 days of delivery if there is any defect or issue. Please keep the package intact for easy return processing.
+    </div>
+  </form>
+
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById("submitBtn");
+      const processingMsg = document.getElementById("processing");
+      submitBtn.disabled = true;
+      processingMsg.style.display = "block";
+      
+      const formData = new FormData(this);
+      const data = {};
+      formData.forEach((value, key) => { data[key] = value });
+
+      fetch("https://script.google.com/macros/s/AKfycbw7x4f91dzVnprdogeJ4hTsxj4BvD27eOkzSXHAVz6ccStFtmIbJt8f93QbI1mIMsysJg/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(() => {
+        processingMsg.style.display = "none";
+        document.getElementById("confirmation").style.display = "block";
+        submitBtn.disabled = false;
+        this.reset();
+      })
+      .catch(err => {
+        alert("Error: " + err);
+        submitBtn.disabled = false;
+        processingMsg.style.display = "none";
+      });
+    });
+  </script>
+</body>
+</html>
